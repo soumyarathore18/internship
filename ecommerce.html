@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Shopya - Online Shopping</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
+
+body{
+    background:#f8f5ff;
+    color:#222;
+}
+header{
+    background:#24113f;
+    color:white;
+    padding:16px 6%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+.logo{
+    font-size:30px;
+    font-weight:bold;
+    color:#ff8a00;
+}
+
+nav{
+    display:flex;
+    align-items:center;
+    gap:25px;
+}
+
+nav a{
+    color:white;
+    text-decoration:none;
+}
+
+.cart-btn{
+    background:#ff8a00;
+    color:white;
+    border:0;
+    padding:10px 17px;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.hero{
+    min-height:430px;
+    padding:80px 7%;
+    display:flex;
+    align-items:center;
+    background:linear-gradient(120deg,#24113f,#6d28a9);
+    color:white;
+}
+
+.hero-content{
+    max-width:650px;
+}
+
+.hero h1{
+    font-size:52px;
+    margin-bottom:15px;
+}
+
+.hero h1 span{
+    color:#ff8a00;
+}
+
+.hero p{
+    font-size:19px;
+    line-height:1.6;
+    margin-bottom:28px;
+    color:#eee;
+}
+
+.shop-btn{
+    display:inline-block;
+    padding:14px 28px;
+    background:#ff8a00;
+    color:white;
+    text-decoration:none;
+    border-radius:8px;
+    font-weight:bold;
+}
+
+
+.controls{
+    padding:30px 6%;
+    display:flex;
+    justify-content:center;
+    gap:15px;
+    flex-wrap:wrap;
+}
+
+.controls input,
+.controls select{
+    width:270px;
+    padding:13px 15px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    outline:none;
+    background:white;
+}
+.products{
+    padding:20px 6% 70px;
+}
+
+.products h2{
+    text-align:center;
+    color:#24113f;
+    font-size:32px;
+    margin-bottom:35px;
+}
+
+.product-grid{
+    display:grid;
+    grid-template-columns:
+        repeat(auto-fit,minmax(220px,1fr));
+    gap:25px;
+}
+
+.product{
+    background:white;
+    border-radius:14px;
+    overflow:hidden;
+    box-shadow:0 5px 20px rgba(36,17,63,.10);
+    transition:.3s;
+}
+
+.product:hover{
+    transform:translateY(-7px);
+}
+
+.product-image{
+    height:230px;
+    background:#f1ebff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.product-image img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    padding:15px;
+}
+
+.product-info{
+    padding:18px;
+}
+
+.product-info h3{
+    color:#24113f;
+    margin-bottom:8px;
+}
+
+.category{
+    color:#888;
+    font-size:13px;
+    margin-bottom:10px;
+}
+
+.price{
+    color:#ff6b00;
+    font-size:21px;
+    font-weight:bold;
+    margin-bottom:15px;
+}
+
+.add-btn{
+    width:100%;
+    padding:12px;
+    background:#24113f;
+    color:white;
+    border:0;
+    border-radius:7px;
+    cursor:pointer;
+    font-weight:bold;
+}
+
+.add-btn:hover{
+    background:#ff8a00;
+}
+.cart{
+    position:fixed;
+    right:-420px;
+    top:0;
+    width:390px;
+    max-width:90%;
+    height:100vh;
+    background:white;
+    z-index:200;
+    padding:25px;
+    box-shadow:-5px 0 25px rgba(0,0,0,.25);
+    transition:.35s;
+    overflow-y:auto;
+}
+
+.cart.active{
+    right:0;
+}
+
+.cart-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.cart-header h2{
+    color:#24113f;
+}
+
+.close-cart{
+    border:0;
+    background:#ef4444;
+    color:white;
+    padding:8px 12px;
+    border-radius:5px;
+    cursor:pointer;
+}
+
+.cart-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:10px;
+    padding:15px 0;
+    border-bottom:1px solid #eee;
+}
+
+.cart-item-info{
+    flex:1;
+}
+
+.cart-item-info h4{
+    font-size:14px;
+    margin-bottom:5px;
+}
+
+.cart-item-info p{
+    color:#ff6b00;
+    font-weight:bold;
+}
+
+.quantity{
+    display:flex;
+    align-items:center;
+    gap:7px;
+}
+
+.quantity button{
+    width:26px;
+    height:26px;
+    border:0;
+    border-radius:5px;
+    background:#24113f;
+    color:white;
+    cursor:pointer;
+}
+
+.cart-total{
+    margin-top:25px;
+    font-size:22px;
+    font-weight:bold;
+    color:#24113f;
+}
+
+.checkout{
+    width:100%;
+    padding:14px;
+    margin-top:15px;
+    border:0;
+    background:#ff8a00;
+    color:white;
+    border-radius:8px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:16px;
+}
+footer{
+    background:#24113f;
+    color:white;
+    text-align:center;
+    padding:30px;
+}
+
+footer span{
+    color:#ff8a00;
+}
+
+@media(max-width:700px){
+
+    header{
+        padding:15px 4%;
+    }
+
+    nav{
+        gap:10px;
+    }
+
+    nav a{
+        display:none;
+    }
+
+    .hero{
+        text-align:center;
+        padding:60px 5%;
+    }
+
+    .hero h1{
+        font-size:38px;
+    }
+
+    .hero p{
+        font-size:16px;
+    }
+}
+</style>
+</head>
+
+<body>
+<header>
+
+    <div class="logo">Shopya</div>
+
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#products">Products</a>
+
+        <button class="cart-btn" onclick="openCart()">
+            🛒 Cart (<span id="cartCount">0</span>)
+        </button>
+    </nav>
+
+</header>
+<section class="hero" id="home">
+
+    <div class="hero-content">
+
+        <h1>
+            Everything You Need,
+            <span>Shopya</span>
+        </h1>
+
+        <p>
+            Discover trending electronics, fashion and
+            accessories at amazing prices.
+        </p>
+
+        <a href="#products" class="shop-btn">
+            Shop Now
+        </a>
+
+    </div>
+
+</section>
+<section class="controls">
+
+    <input
+        type="text"
+        id="search"
+        placeholder="🔍 Search products..."
+        onkeyup="showProducts()"
+    >
+
+    <select
+        id="category"
+        onchange="showProducts()">
+
+        <option value="all">
+            All Categories
+        </option>
+
+        <option value="Electronics">
+            Electronics
+        </option>
+
+        <option value="Fashion">
+            Fashion
+        </option>
+
+        <option value="Accessories">
+            Accessories
+        </option>
+
+    </select>
+
+</section>
+<section class="products" id="products">
+
+    <h2>🔥 Trending Products</h2>
+
+    <div
+        class="product-grid"
+        id="productGrid">
+    </div>
+
+</section>
+<div class="cart" id="cart">
+
+    <div class="cart-header">
+
+        <h2>Your Cart</h2>
+
+        <button
+            class="close-cart"
+            onclick="closeCart()">
+            ✕
+        </button>
+
+    </div>
+
+    <div id="cartItems"></div>
+
+    <div class="cart-total">
+        Total: ₹<span id="cartTotal">0</span>
+    </div>
+
+    <button
+        class="checkout"
+        onclick="checkout()">
+        Proceed to Checkout
+    </button>
+
+</div>
+<footer>
+
+    <p>
+        © 2026 <span>Shopya</span>.
+        All Rights Reserved.
+    </p>
+
+</footer>
+
+
+<script>
+const products = [
+
+    {
+        id:1,
+        name:"Apple AirPods 4",
+        price:12900,
+        category:"Electronics",
+        image:
+        "https://store.storeimages.cdn-apple.com/1/as-images.apple.com/is/airpods-4-anc-select-202409_FMT_WHH"
+    },
+
+    {
+        id:2,
+        name:"Samsung Galaxy Buds FE",
+        price:6999,
+        category:"Electronics",
+        image:
+        "https://images.samsung.com/is/image/samsung/p6pim/in/sm-r400nzaainu/gallery/in-galaxy-buds-fe-r400-sm-r400nzaainu-thumb-538023089"
+    },
+
+    {
+        id:3,
+        name:"Sony WH-1000XM5",
+        price:29990,
+        category:"Electronics",
+        image:
+        "https://m.media-amazon.com/images/I/61ULAz1OXXL._SL1500_.jpg"
+    },
+
+    {
+        id:4,
+        name:"Nike Air Max Shoes",
+        price:8995,
+        category:"Fashion",
+        image:
+        "https://static.nike.com/a/images/t_default/air-max-shoes.jpg"
+    },
+
+    {
+        id:5,
+        name:"Puma Sneakers",
+        price:3499,
+        category:"Fashion",
+        image:
+        "https://images.puma.com/image/upload/f_auto,q_auto/b_rgb:fafafa/global/390776/01/sv01/fnd/IND/w/1000/h/1000/"
+    },
+
+    {
+        id:6,
+        name:"Levi's Men's T-Shirt",
+        price:1299,
+        category:"Fashion",
+        image:
+        "https://lsco.scene7.com/is/image/lsco/16143-0796_1"
+    },
+
+    {
+        id:7,
+        name:"Fossil Analog Watch",
+        price:10995,
+        category:"Accessories",
+        image:
+        "https://fossil.scene7.com/is/image/FossilPartners/FS4656_main"
+    },
+
+    {
+        id:8,
+        name:"American Tourister Backpack",
+        price:1899,
+        category:"Accessories",
+        image:
+        "https://americantourister.in/cdn/shop/products/backpack.jpg"
+    }
+
+];
+let cart = [];
+function showProducts(){
+
+    const grid =
+        document.getElementById("productGrid");
+
+    const search =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
+
+    const category =
+        document
+        .getElementById("category")
+        .value;
+
+    grid.innerHTML = "";
+
+
+    const filtered =
+        products.filter(product => {
+
+            const searchMatch =
+                product.name
+                .toLowerCase()
+                .includes(search);
+
+            const categoryMatch =
+                category === "all" ||
+                product.category === category;
+
+            return searchMatch && categoryMatch;
+
+        });
+
+
+    filtered.forEach(product => {
+
+        grid.innerHTML += `
+
+            <div class="product">
+
+                <div class="product-image">
+
+                    <img
+                        src="${product.image}"
+                        alt="${product.name}"
+                        onerror="
+                        this.style.display='none'
+                        "
+                    >
+
+                </div>
+
+                <div class="product-info">
+
+                    <h3>
+                        ${product.name}
+                    </h3>
+
+                    <div class="category">
+                        ${product.category}
+                    </div>
+
+                    <div class="price">
+                        ₹${product.price.toLocaleString("en-IN")}
+                    </div>
+
+                    <button
+                        class="add-btn"
+                        onclick="addToCart(${product.id})">
+
+                        Add to Cart
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+}
+function addToCart(id){
+
+    const product =
+        products.find(p => p.id === id);
+
+    const existing =
+        cart.find(item => item.id === id);
+
+
+    if(existing){
+
+        existing.quantity++;
+
+    }else{
+
+        cart.push({
+            ...product,
+            quantity:1
+        });
+
+    }
+
+    updateCart();
+
+}
+function updateCart(){
+
+    const cartItems =
+        document.getElementById("cartItems");
+
+    cartItems.innerHTML = "";
+
+    let total = 0;
+    let count = 0;
+
+
+    cart.forEach(item => {
+
+        total +=
+            item.price * item.quantity;
+
+        count += item.quantity;
+
+
+        cartItems.innerHTML += `
+
+            <div class="cart-item">
+
+                <div class="cart-item-info">
+
+                    <h4>
+                        ${item.name}
+                    </h4>
+
+                    <p>
+                        ₹${item.price.toLocaleString("en-IN")}
+                    </p>
+
+                </div>
+
+                <div class="quantity">
+
+                    <button
+                        onclick="changeQuantity(
+                            ${item.id},-1
+                        )">
+                        -
+                    </button>
+
+                    <span>
+                        ${item.quantity}
+                    </span>
+
+                    <button
+                        onclick="changeQuantity(
+                            ${item.id},1
+                        )">
+                        +
+                    </button>
+
+                </div>
+
+            </div>
+
+        `;
+
+    });
+
+
+    document.getElementById("cartCount")
+        .innerText = count;
+
+    document.getElementById("cartTotal")
+        .innerText =
+        total.toLocaleString("en-IN");
+
+}
+
+function changeQuantity(id, change){
+
+    const item =
+        cart.find(item => item.id === id);
+
+    if(!item) return;
+
+    item.quantity += change;
+
+
+    if(item.quantity <= 0){
+
+        cart =
+            cart.filter(item => item.id !== id);
+
+    }
+
+    updateCart();
+
+}
+function openCart(){
+
+    document
+        .getElementById("cart")
+        .classList.add("active");
+}
+function closeCart(){
+
+    document
+        .getElementById("cart")
+        .classList.remove("active");
+
+}
+function checkout(){
+
+    if(cart.length === 0){
+
+        alert("Your cart is empty!");
+
+        return;
+
+    }
+
+    alert(
+        "Order placed successfully! 🎉\n\n" +
+        "Thank you for shopping with Shopya!"
+    );
+    cart = [];
+    updateCart();
+    closeCart();
+}
+showProducts();
+
+</script>
+
+</body>
+</html>
